@@ -1,0 +1,5 @@
+build
+*_main.log
+*_skipped_adom.log
+*_upgrade_error.log
+fmg_adom_upgrade.spec
