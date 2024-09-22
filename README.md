@@ -17,6 +17,7 @@ Usage
 
         Option 2) Create EXE via pyinstaller (Windows)
                 Clone the repository to your local machine (Windows if creating Windows EXE)
+                pip install -r requirements.txt
                 pip install pyinstaller
                 See 'Build python to exe HOWTO.txt' file for pyinstaller command
                 run EXE file under created /dist
