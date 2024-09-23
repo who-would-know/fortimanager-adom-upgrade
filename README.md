@@ -25,7 +25,7 @@ Usage
 
     Python py file
         1) Clone the repository:
-            git clone
+            git clone https://github.com/who-would-know/fortimanager-adom-upgrade.git
 
         2) Install the dependencies:
             pip install -r requirements.txt
