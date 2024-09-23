@@ -1,5 +1,6 @@
 FortiManager ADOM Upgrade
 This script automates the process of logging into FortiManager, finding ADOMs based on FortiGate device/VDOMs, then upgrading the ADOM to the version based on the user's input
+
 Description
 The script streamlines the process of upgrading multiple ADOM in an environment were the FortiGate has multi-vdom enable and in different ADOMs:
 
