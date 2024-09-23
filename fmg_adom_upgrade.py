@@ -442,6 +442,7 @@ def adom_upgrade_select():
         adom_start_ver - Starting ADOM Version
         adom_end_ver - Ending ADOM Version
         upgrade_path_count - The number of upgrades to do for each ADOM
+        adom_ver_list - list of ADOM versions available in the FortiManager
     '''
     # Get ADOM available version list
     adom_ver_list = get_fmg_version()
@@ -487,7 +488,7 @@ def adom_upgrade_select():
     print_log(f'    Using Ending ADOM DB: {adom_end_ver}\n')
     upgrade_path_count = adom_ver_list.index(adom_end_ver) - adom_ver_list.index(adom_start_ver)
 
-    return adom_start_ver, adom_end_ver, upgrade_path_count
+    return adom_start_ver, adom_end_ver, upgrade_path_count, adom_ver_list
     
 def continue_script():
     ''' Prompts User to check variables before continuing script
@@ -608,7 +609,7 @@ def main():
     fmg_login(host_apiuser, host_passwd, host_ip)
 
     ## Get FortiManager Version
-    adom_start_version, adom_end_version, upgrade_path_count = adom_upgrade_select()
+    adom_start_version, adom_end_version, upgrade_path_count, adom_version_list = adom_upgrade_select()
     print_log('-=-' * 20)
     print_log('--> Final variables: ')
     print_log(f' FMG IP: {host_ip}')
@@ -644,13 +645,21 @@ def main():
         sys.exit(1)
 
     #Upgrade ADOMs
+    adom_index = adom_version_list.index(adom_start_version)
+
     for i in range(upgrade_path_count):
-         for adom in adom_list:
-             print_log(f'<-- Starting upgrade on ADOM {adom}')
-             workspace_lock(adom)
-             upgrade_adom_checkver(adom, adom_start_version, host_apiuser)
-             workspace_unlock(adom)
-    
+        for adom in adom_list:
+            print_log(f'<-- Starting upgrade on ADOM {adom}')
+            workspace_lock(adom)
+            upgrade_adom_checkver(adom, adom_start_version, host_apiuser)
+            workspace_unlock(adom)
+        # Increment the version for the next iteration
+        adom_index += 1
+        if adom_index >= len(adom_version_list) or adom_version_list[adom_index] == adom_end_version:
+            break
+        else:
+            adom_start_version = adom_version_list[adom_index]
+
     # Completed ADOM upgrades
     print_log(f'Completed ADOM upgrades for FortiGate Device {fgt_device_name}\n')
 
